@@ -1,0 +1,78 @@
+
+
+
+#--- Start MySQL interacttive shell
+mysql -u root -p
+
+;--- Create database
+CREATE DATABASE dr7;
+
+#--- Specify working table
+USE dr7
+
+#--- Delete table
+Drop table test;
+
+#--- Create table
+CREATE TABLE photo (
+ra  FLOAT(8,4), 
+de  FLOAT(8,4), 
+z   FLOAT(8,4), 
+ec  FLOAT(8,4)
+);
+
+#--- Fancy table description
+Describe photo;
+
+#--- Load data from file into table
+LOAD DATA LOCAL INFILE '/home/miguel/PythonSQL/DR7_TEST.dat' INTO TABLE photo 
+FIELDS TERMINATED BY ',' 
+LINES TERMINATED BY '\n' 
+IGNORE 1 LINES 
+(ra,de,z,ec);
+
+
+----------------------------------
+#  RA          DEC         z         eclass
+237.28768,-0.54428994,0.077948697,0.016483599
+237.21034,-0.53942095,0.43233100,-0.15232700
+237.13193,-0.49484638,-0.00021978399,-0.77729398
+237.20984,-0.48056239,0.78286999,0.0000000
+236.84064,-0.42655201,0.30095801,-0.16299100
+236.84000,-0.56722811,0.22983199,-0.23497100
+.
+.
+.
+----------------------------------
+
+
+SELECT * FROM photo;
+
+#===================
+#=== IDL
+#===================
+
+Create .my.cnf file
+
+------------------------
+[client]
+user = root
+password = mypass
+host = "localhost"
+
+[mysql]
+database = dr7
+------------------------
+
+
+#--- Open database
+IDL> GET_LUN, U
+IDL> openmysql, U, 'dr7'
+
+#--- Do a query
+IDL> my_query = 'SELECT * FROM photo;'
+IDL> mysqlquery, U, my_query, ra,de,z,ec, format='(f,f,f,f)'
+
+
+
+show tables;
